@@ -1,0 +1,154 @@
+{% extends 'base\base.html' %}
+{% load staticfiles %}
+{% block estilo %} <link href="{% static 'css/perfil.css' %}" rel="stylesheet">{% endblock %}
+
+
+{% block title %}
+Perfil
+{% endblock %}
+{% block content %}
+<br>
+<br>
+ 
+ <div class="container vcenter">
+	<div class="row">
+
+        
+        
+       <div class="col-md-7 ">
+
+<div class="panel panel-default">
+  <div class="panel-heading">  <h4 >Perfil de usuario</h4></div>
+   <div class="panel-body">
+       
+    <div class="box box-info">
+        
+            <div class="box-body">
+                     <div class="col-sm-6">
+                     <div  align="center"> <img alt="User Pic" src="{% static 'img/iconos/sin_avatar.png' %}"id="profile-image1" class="img-circle img-responsive"> 
+                
+                <input id="profile-image-upload" class="hidden" type="file">
+<div style="color:#999;" >Haga click aquí para camabiar su foto de perfil</div>
+                <!--Upload Image Js And Css-->
+           
+              
+   
+                
+                
+                     
+                     
+                     </div>
+              
+              <br>
+    
+              <!-- /input-group -->
+            </div>
+            <div class="col-sm-6">
+                <h4 style="color:#00b1b1;">{{cliente.nombre}} {{cliente.apellido}}     <a title="Editar perfil" type="button" class="btn btn-outline-primary btn-primary"><span class="glyphicon glyphicon-pencil"></span></a></h4>
+              <span><p>Cliente</p></span>            
+            </div>
+            <div class="clearfix"></div>
+            <hr style="margin:5px 0 5px 0;">
+   <h3>Datos generales</h3> 
+              
+<div class="col-sm-5 col-xs-6 tital " >Nombre(s):</div><div class="col-sm-7 col-xs-6 ">{{cliente.nombre}}</div>
+     <div class="clearfix"></div>
+<div class="bot-border"></div>
+
+<div class="col-sm-5 col-xs-6 tital " >Apellido(s):</div><div class="col-sm-7"> {{cliente.apellido}}</div>
+  <div class="clearfix"></div>
+<div class="bot-border"></div>
+
+
+
+<div class="col-sm-5 col-xs-6 tital " >Día de registro:</div><div class="col-sm-7">15 Jun 2016</div>
+
+  <div class="clearfix"></div>
+<div class="bot-border"></div>
+
+
+ <div class="clearfix"></div>
+<hr style="margin:5px 0 5px 0;">
+<h3>Dirección</h3>
+
+
+<div class="col-sm-5 col-xs-6 tital " >Calle:</div><div class="col-sm-7">Ignacio Ramirez</div>
+
+ <div class="clearfix"></div>
+<div class="bot-border"></div>
+<div class="col-sm-5 col-xs-6 tital " >Número:</div><div class="col-sm-7">400 ote</div>
+
+ <div class="clearfix"></div>
+<div class="bot-border"></div>
+
+            <div class="col-sm-5 col-xs-6 tital " >Colonia:</div><div class="col-sm-7">Del Parque</div>
+
+ <div class="clearfix"></div>
+<div class="bot-border"></div>
+                <div class="col-sm-5 col-xs-6 tital " >Código Postal:</div><div class="col-sm-7">81259</div>
+
+ <div class="clearfix"></div>
+<div class="bot-border"></div>
+             
+                    <div class="col-sm-5 col-xs-6 tital " >Ciudad:</div><div class="col-sm-7">Los Mochis</div>
+
+ <div class="clearfix"></div>
+<div class="bot-border"></div>
+                                    <div class="col-sm-5 col-xs-6 tital " >Estado o provincia:</div><div class="col-sm-7">Sinaloa</div>
+
+ <div class="clearfix"></div>
+<div class="bot-border"></div>
+                  <div class="col-sm-5 col-xs-6 tital " >País:</div><div class="col-sm-7">México</div>
+
+ 
+
+
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+        </div>
+       
+            
+    </div> 
+    </div>
+</div>  
+     <script>
+                  $(function() {
+    $('#profile-image1').on('click', function() {
+        $('#profile-image-upload').click();
+    });
+});       
+              </script> 
+       
+       
+       
+       
+    
+         <br>
+        <br>
+    <div id="map"></div>
+        <h3>Selecciona tu ubicación</h3>
+    <script>
+      function initMap() {
+        var uluru = {lat: 25.7667, lng: -108.9667};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwaYxp9FNqlqrD39VaI1G8BGieF02zAnc&callback=initMap">
+    </script>
+  
+       
+       
+       
+</div>
+
+ {% endblock %}

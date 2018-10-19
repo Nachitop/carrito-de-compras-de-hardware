@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block estilo %}<link href="{% static 'css/password_reset_form.css' %}" rel="stylesheet">{% endblock %}
+{% block title %}
+Pagar con Pypal
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+
+<div>
+ <center><a href="{% url 'index:index' %}">   <img  src="{% static 'img/logos/dimercom-logo2.png' %}" ></a></center>
+        <center> <div>
+         
+          <br>
+          {{ form.render }}
+<br>
+
+     <a type="button" href="{% url 'index:index' %}" class="btn btn-primary btn-md seguir">Seguir Comprando</a>   
+             </div> </center>  
+</div>
+    
+{% endblock %}
+

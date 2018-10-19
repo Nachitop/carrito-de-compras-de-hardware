@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Ver carrito
+{% endblock %}
+{% block estilo %} <link href="{% static 'css/historial.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<h1 id="inicio-carrito">
+   Historial de compras realizadas
+</h1>
+																				
+	<br>		        	    					
+<div class="container-fluid">
+
+    <table class="table">
+    <thead>
+        <tr>
+             <th><center>Venta #</center></th>
+            <th>Tipo pago</th>
+            <th><center>Fecha de venta</center></th>
+             <th><center>Factura</center></th>
+           
+           
+        </tr>
+    </thead>
+    <tbody>
+    {% for venta in historial_venta %}
+        <tr>
+            
+            <td><center>Carrito compras {{venta.id_venta}} </center></td>
+    
+
+            <td>{{venta.tipo_pago.tipo_pago}}</td>
+    
+
+            <td><center>{{venta.fecha_venta}}</center></td>
+    
+    
+            <td><center><a title="Generar factura" type="button" class="btn btn-outline-primary btn-primary generar" value="" href="{% url 'index:factura_compra_pdf' venta.id_venta %}"><span class="glyphicon glyphicon-file"></span></a></center></td>
+               
+        </tr>
+            
+    {% endfor %}
+    </tbody>
+</table>
+   
+</div>
+{% endblock %}
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

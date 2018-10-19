@@ -1,0 +1,71 @@
+
+
+
+
+#titulo-filtro{
+    
+    height: 20px;
+    line-height: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: darkgrey;
+    text-shadow: 1px 1px 0 #fff;
+
+    min-width: 210px;
+    
+}
+
+
+#filtros{
+    
+    padding-top: 30px;
+}
+
+
+
+.titulos{
+    color:darkturquoise;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+
+.contenedor-familia{
+    float:flex;
+    display:inline-block;
+   width: 500px;
+}
+
+.contenedor-marca{
+    float:flex;
+    display:inline-block;
+   width: 500px;
+}
+
+
+.contenedor-procesadorgrafico{
+    float:flex;
+    display:inline-block;
+   width: 500px;
+}
+
+
+.contenedor-memoria{
+    float:flex;
+    display:inline-block;
+    width: 500px;
+}
+
+
+.contenedor-tipo{
+    float:flex;
+    display:inline-block;
+   width: 500px;
+}
+
+
+
+
+
+

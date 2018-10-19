@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block estilo %}<link href="{% static 'css/password_reset_done.css' %}" rel="stylesheet">{% endblock %}
+{% block title %}
+Pagar con Pypal exitoso
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="container">
+      <form class="form-signin">
+       <a href="{% url 'index:index' %}">   <img  src="{% static 'img/logos/dimercom-logo2.png' %}" ></a>
+              
+          <h1>Su pago se ha recibido con exito. Gracias por comprar con nosotros!</h1>
+          <br>
+          <br>
+          <a type="button" href="{% url 'index:index' %}" value="Seguir Comprando" class="btn btn-primary btn-lg btn-block">Seguir Comprando</a>
+          </form>
+   </div> 
+
+
+{% endblock %}
+{% block script %}
+<script>
+           
+sessionStorage.clear();
+</script>
+{% endblock %}

@@ -1,0 +1,930 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Producto
+{% endblock %}
+{% block estilo %} <link href="{% static 'css/producto.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+<br>
+<br>
+<div class="container-fluid">
+   
+
+{% if imagenes %}
+    <div class="col-sm-4">
+<div class="ubislider-image-container left" data-ubislider="#slider"></div>
+<div class="ubislider left" id="slider">
+    <a class="arrow prev"></a>
+    <a class="arrow next"></a>
+    <ul class="ubislider-inner">
+    
+        
+            {% if imagenes.imagen_principal %}
+        <li>
+        	<img class="zoom" src="{{imagenes.imagen_principal.url}}">
+        </li>
+        {% endif %}
+        {% if imagenes.imagen1 %}
+        <li>
+            
+        	<img class="zoom" src="{{imagenes.imagen1.url}}">
+        </li>
+        {% endif %}
+         {% if imagenes.imagen2 %}
+        <li>
+        	<img class="zoom" src="{{imagenes.imagen2.url}}">
+        </li>
+        {% endif %}
+          {% if imagenes.imagen3 %}
+        <li>
+        	<img  class="zoom" src="{{imagenes.imagen3.url}}">
+        </li>
+        {% endif %}
+    </ul>
+</div>
+        </div>
+{% endif %}
+
+    <div class="col-sm-8 producto">
+        {% if producto.categoria.id_categoria == 1 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{procesador.familia_procesador.familia_procesador}} {{procesador.modelo_procesador.modelo_procesador}} S-{{procesador.socket_procesador.socket_procesador}}
+        {{procesador.nucleos}}-core {{procesador.cantidad_cache}}MB {{procesador.cache_procesador.cache_procesador}}</h1>
+        
+        {% elif producto.categoria.id_categoria == 2 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{tarjetavideo.familia_grafica.familia_grafica}} {{tarjetavideo.procesador_grafico.procesador_grafico}} {{tarjetavideo.modelo_grafica.modelo_grafica}} {{tarjetavideo.memoria_grafica_gb}}GB {{tarjetavideo.tipo_memoria_grafica.tipo_memoria_grafica}} {{tarjetavideo.ancho_datos_bits}}-bits</h1>
+        
+        {% elif producto.categoria.id_categoria == 3 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{tarjetamadre.factor_forma.factor_forma}} {{tarjetamadre.chipset.chipset}} {{tarjetamadre.modelo_tarjeta_madre.modelo_tarjeta_madre}} S-{{tarjetamadre.socket_procesador.socket_procesador}} {{tarjetamadre.cantidad_memoria_gb}}GB {{tarjetamadre.tipo_memoria.tipo_memoria}} para {{tarjetamadre.para_marca.marca}}</h1>
+        
+        {% elif producto.categoria.id_categoria == 4 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{ssd.modelo_dd.modelo_dd}} {{ssd.capacidad}}GB {{ssd.tamdd.tamdd}} {{ssd.interfazdd.interfazdd}}</h1>
+        
+         {% elif producto.categoria.id_categoria == 5 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{dd.modelo_dd.modelo_dd}} {{dd.capacidad}}GB {{dd.cache}}MB de memoria cache {{dd.tamdd.tamdd}} {{dd.interfazdd.interfazdd}} {{dd.rpm.rpm}} RPM</h1>
+        
+        {% elif producto.categoria.id_categoria == 6 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{ram.modelo_ram.modelo_ram}} {{ram.cantidad_memoria_gb}}GB {{ram.tipo_memoria.tipo_memoria}} {{ram.cantidad_memoria_mhz}}Mhz</h1>
+        
+        
+        {% elif producto.categoria.id_categoria == 7 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}}  {{psu.modelo_psu.modelo_psu}} {{psu.potencia_nominal}}W {{psu.certificacion.certificacion}} {{psu.factor_forma.factor_forma}}</h1>
+        
+        {% elif producto.categoria.id_categoria == 8 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{gabinete.modelo_gabinete.modelo_gabinete}} {{gabinete.factor_forma_gabinete.factor_forma_gabinete}} 
+            {% if gabinete.ventana_lateral == true %}
+            Ventana lateral
+            {% endif %}
+            {% if gabinete.psu_incluida == true %}
+            C/Fuente {{gabinete.potencia_nominal}}W
+            {% else %}
+            S/Fuente
+            {% endif %}
+            </h1> 
+        
+         {% elif producto.categoria.id_categoria == 9 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}} {{teclado.modelo_teclado.modelo_teclado}} {{teclado.conectividad.conectividad}} {{teclado.tipo_interfaz.tipo_interfaz}} {{teclado.idioma.idioma}}</h1>
+        
+        
+        
+         {% elif producto.categoria.id_categoria == 10 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}}  {{mouse.modelo_mouse.modelo_mouse}} {{mouse.conectividad.conectividad}} {{mouse.tipo_interfaz.tipo_interfaz}} {{mouse.dpi}} Dpi</h1>
+        
+       {% elif producto.categoria.id_categoria == 11 %}
+        <h1>{{producto.categoria.categoria}} {{producto.marca.marca}}  {{monitor.modelo_monitor.modelo_monitor}} {{monitor.tam_pantalla}}" {{monitor.resolucion.resolucion}} {{monitor.hd.hd}} {{monitor.relacion_aspecto.relacion_aspecto}}</h1>
+        
+        
+        {% endif %}
+          </div>
+     
+       <div class="col-sm-8">
+       <div class="col-sm-5">
+          <h2>Precio Normal</h2>
+           {% if oferta %}
+           <strike><h3><span class="label label-default">${{producto.precio}}</span></h3></strike>
+           {% else %}
+           <h1><span class="label label-warning">${{producto.precio}}</span></h1>
+           {% endif %}
+           <br>
+           <br>
+           <br>
+            <br>
+           
+           {% if producto.cantidad >= 10 %}
+           <h3>Existencia: <span class="label label-success">{{producto.cantidad}}</span> pzs</h3>
+           {% elif producto.cantidad >= 5  %}
+           <h3>Existencia: <span class="label label-primary">{{producto.cantidad}}</span> pzs</h3>
+           {% elif producto.cantidad >= 1  %}
+           <h3>Existencia: <span class="label label-danger">{{producto.cantidad}}</span> pzs</h3>
+            {% endif %}
+           {% if oferta %}
+            <p>Vigencia del {{oferta.fecha_inicio}} a {{oferta.fecha_final}}</p>
+            {% endif %}
+        </div>
+        <div class="col-sm-5">
+            {% if oferta %}
+            <h2>Precio Oferta</h2>
+            
+            <h1><span class="label label-warning">${{precio_oferta}}</span></h1>
+            <br>
+          <br>
+            <br>
+            
+            <h3>Descuento: <span class="label label-warning">{{oferta.porciento_desc}}%</span></h3>
+            <h3>Usted ahorra: <span class="label label-warning">${{ahorra}}</span></h3>
+        
+           {% endif %}
+        </div>
+        
+      
+           <br>
+            <br>
+           <br>
+            
+           
+        
+           
+        <div class="col-sm-2">
+          
+														<div class="col-xs-12 stock nopadding text-center quantTitle">CANTIDAD</div>
+							<div class="carritoDetalle carritoAddItems text-center" style="">
+								<button class="buttonSumOrder pull-left" id="minusbutOrder" type="button">-</button>
+			        	        <input type="text" class="textoInput pull-left" id="cantidadCarrito" style="width: 30px; text-align: center;" value="1" readonly/>
+			        	        <button class="buttonSumOrder pull-left" id="addbutOrder" type="button" data-value="{{producto.id_producto}}">+</button>
+			        	    </div>
+			        	    						
+            <br>
+            <br>
+
+         <button value="{{producto.id_producto}}" type="button" class="btn btn-primary btn-lg comprar" role="button" data-toggle="tooltip" title="Añadir al carrito"><span class="glyphicon glyphicon-shopping-cart"> Agregar</span></button>
+        
+            <br>
+            <br>
+            
+        <button type="button" class="btn btn-danger btn-lg favorito" role="button" data-toggle="tooltip" title="Añadir a favoritos" value="{{producto.id_producto}}"><span class="glyphicon glyphicon-heart"> Agregar</span></button>
+            <br>
+            <br>
+           
+        </div>
+        
+  </div>
+ 
+</div>
+    <br>
+
+
+
+<div class="container-fluid lol">
+    
+  <h2>Más información acerca del producto</h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Especificaciones</a></li>
+    <li><a data-toggle="tab" href="#menu1">Comentarios</a></li>
+   
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      
+        
+        <div class="table-responsive">          
+  <table class="table table-bordered table-striped table-sm table-condensed">
+      
+      
+      <thead>
+    <tr>
+     {% if producto.categoria.id_categoria == 1 %}
+      <th scope="col">Frecuencia del procesador</th>
+      <th scope="col">Frecuencia Turbo del procesador</th>
+         <th scope="col">Disipador</th>
+      <th scope="col">Hilos de procesamiento</th>
+      <th scope="col">Litografía</th>
+        <th scope="col">Sistema Operativo</th>
+        <th scope="col">Cantidad de memoría máxima soportada (MHZ)</th>
+         <th scope="col">Tipo de memoria</th>
+         <th scope="col">Adaptador Gráfico</th>
+         <th scope="col">TDP (Watts)</th>
+        
+        
+        {% elif producto.categoria.id_categoria == 2 %}
+        <th scope="col">Nucleos cuda</th>
+        <th scope="col">Interfaz</th>
+        <th scope="col">Frecuencia</th>
+        <th scope="col">Frecuencia turbo</th>
+        <th scope="col">Versión de Directx</th>
+        <th scope="col">Puertos DVI</th>
+        <th scope="col">Puertos HDMI</th>
+        <th scope="col">Displayport</th>
+        <th scope="col" >Colores</th>
+        
+        
+        {% elif producto.categoria.id_categoria == 3 %}
+        <th scope="col">Slots de memoria RAM</th>
+        <th scope="col">Puertos PCI</th>
+        <th scope="col">Puertos USB 3.0</th>
+        <th scope="col">Puertos USB 2.0</th>
+        <th scope="col">Puertos SATA</th>
+        <th scope="col">Puertos HDMI</th>
+        <th scope="col" >Colores</th>
+        
+        
+          {% elif producto.categoria.id_categoria == 5 %}
+        <th scope="col">RPM</th>
+        
+          {% elif producto.categoria.id_categoria == 4 %}
+        <th scope="col">Velocidad de escritura (MB/s)</th>
+        <th scope="col">Velocidad de lectura(MB/s)</th> 
+        
+          {% elif producto.categoria.id_categoria == 6 %}
+        <th scope="col">Latencia</th>
+        <th scope="col">Factor de forma</th>
+        <th scope="col" >Colores</th>
+        
+        
+          {% elif producto.categoria.id_categoria == 7 %}
+        <th scope="col">Ventilador (mm)</th>
+        <th scope="col">Conectores sata</th>
+        
+         {% elif producto.categoria.id_categoria == 8 %}
+        <th scope="col">Tarjetas madre soportadas</th>
+        <th scope="col">Discos duros soportados</th>
+        <th scope="col">Puertos USB 2.0</th>
+        <th scope="col">Puertos USB 3.0</th>
+        <th scope="col">Ranuras de expansión</th>
+        <th scope="col">Ventiladores</th>
+        <th scope="col" >Colores</th>
+        
+        
+         {% elif producto.categoria.id_categoria == 9 %}
+        <th scope="col">RGB</th>
+        <th scope="col" >Colores</th>
+        
+        
+        {% elif producto.categoria.id_categoria == 10 %}
+        <th scope="col">RGB</th>
+        <th scope="col" >Colores</th>
+       
+        
+        {% elif producto.categoria.id_categoria == 11 %}
+        <th scope="col">Puertos HDMI</th>
+        <th scope="col">Puertos DVI</th>
+        <th scope="col">Puertos DISPLAYPORT</th>
+        <th scope="col">Puertos VGA</th>
+        <th scope="col" >Colores</th>
+        
+        
+        
+         {% endif %}
+        
+    </tr>
+  </thead>
+    <tbody>
+      <tr>
+          {% if producto.categoria.id_categoria == 1 %}  
+        <td>{{procesador.frecuencia_mhz}}</td>
+        <td>{{procesador.frecuencia_turbo_mhz}}</td>
+        {% if procesador.disipador == True %}
+        <td><img src="{% static 'img/iconos/yes.png' %}"></td>
+          {% else %}
+          <td><img src="{% static 'img/iconos/no.png' %}"></td>
+          {% endif %}
+          
+        <td>{{procesador.hilos}}</td>
+        <td>{{procesador.litografia.litografia_nm}}</td>
+        <td>{{procesador.so.so}}</td>
+          <td>{{procesador.cantidad_memoria_mhz}}</td>
+          <td>{{procesador.tipo_memoria.tipo_memoria}}</td>
+      
+      {% if procesador.adaptador_grafico == True %}
+        <td><img src="{% static 'img/iconos/yes.png' %}"></td>
+          {% else %}
+          <td><img src="{% static 'img/iconos/no.png' %}"></td>
+          {% endif %}
+      
+          
+          <td>{{procesador.tdp}}</td>
+          
+          {% elif producto.categoria.id_categoria == 2 %} 
+          <td>{{tarjetavideo.nucleos_cuda}}</td>
+        <td>{{tarjetavideo.tipo_interfaz.tipo_interfaz}}</td>
+        <td >{{tarjetavideo.frecuencia_mhz}}</td>
+        <td>{{tarjetavideo.frecuencia_turbo_mhz}}</td>
+          <td>{{tarjetavideo.version_directx}}</td>
+          <td>{{tarjetavideo.cantidad_dvi}}</td>
+          <td>{{tarjetavideo.cantidad_hdmi}}</td>
+          <td>{{tarjetavideo.cantidad_displayport}}</td>
+          <td id="color-tarjetavideo"></td>
+        
+          
+          
+          {% elif producto.categoria.id_categoria == 3 %} 
+          <td>{{tarjetamadre.cantidad_ranuras_memoria}}</td>
+        <td>{{tarjetamadre.cantidad_puertos_pci}}</td>
+        <td >{{tarjetamadre.cantidad_puertos_usb3}}</td>
+        <td>{{tarjetamadre.cantidad_puertos_usb2}}</td>
+          <td>{{tarjetamadre.cantidad_puertos_sata}}</td>
+          <td>{{tarjetamadre.cantidad_puertos_hdmi}}</td>
+          <td id="color-tarjetamadre"></td>
+          
+          
+        {% elif producto.categoria.id_categoria == 5 %} 
+          <td>{{dd.rpm.rpm}}</td>
+          
+           {% elif producto.categoria.id_categoria == 4 %} 
+          <td>{{ssd.velocidad_escritura}}</td>
+          <td>{{ssd.velocidad_lectura}}</td>
+          
+           {% elif producto.categoria.id_categoria == 6 %} 
+          <td>{{ram.latencia}}</td>
+          <td>{{ram.factor_forma_ram.factor_forma_ram}}</td>
+          <td id="color-ram"></td>
+          
+           {% elif producto.categoria.id_categoria == 7 %} 
+          <td>{{psu.diametro_ventilador_mm}}</td>
+          <td>{{psu.conectores_sata}}</td>
+          
+          {% elif producto.categoria.id_categoria == 8 %} 
+          <td id="tarjetasmadres-soportadas"></td>
+          <td id="dd-soportados">{{gabinete.dd_soportados.all}}</td>
+          <td>{{gabinete.cantidad_puertos_usb2}}</td>
+           <td>{{gabinete.cantidad_puertos_usb3}}</td>
+           <td>{{gabinete.cantidad_ranuras_expansion}}</td>
+           <td>{{gabinete.cantidad_ventiladores}}</td>
+          <td id="color-gabinete"></td>
+          
+          
+          {% elif producto.categoria.id_categoria == 9 %}
+          {% if teclado.rgb == True %}
+        <td><img src="{% static 'img/iconos/yes.png' %}"></td>
+          {% else %}
+          <td><img src="{% static 'img/iconos/no.png' %}"></td>
+          {% endif %}
+          
+          
+          <td id="color-teclado"></td>
+         
+          
+            {% elif producto.categoria.id_categoria == 10 %} 
+          {% if mouse.rgb == True %}
+        <td><img src="{% static 'img/iconos/yes.png' %}"></td>
+          {% else %}
+          <td><img src="{% static 'img/iconos/no.png' %}"></td>
+          {% endif %}
+          <td id="color-mouse"></td>
+          
+          
+          {% elif producto.categoria.id_categoria == 11 %} 
+          <td>{{monitor.cantidad_hdmi}}</td>
+          <td>{{monitor.cantidad_dvi}}</td>
+           <td>{{monitor.cantidad_dp}}</td>
+          <td>{{monitor.cantidad_vga}}</td>
+          <td id="color-monitor"></td>
+         
+          
+          
+            {% endif %}
+          
+          
+      </tr>
+    </tbody>
+      
+    
+      
+      
+      
+      
+  </table>
+  </div>
+        <br>
+        
+         {% if dimensiones %}
+        <h3>Peso y dimensiones</h3>
+       {% for dimension in dimensiones %}
+        <div class="table-responsive">          
+  <table class="table table-bordered table-striped table-sm table-condensed">
+      
+   
+      <thead>
+    <tr>
+        <th>Alto mm</th>
+         <th>Ancho mm</th>
+         <th>Profundidad mm</th>
+        <th>Peso gr</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+      <td>{{dimension.altura_mm}}</td>
+          <td>{{dimension.anchura_mm}}</td>
+          <td>{{dimension.altura_mm}}</td>
+          <td>{{dimension.peso_g}}</td>
+              </tr>
+      </tbody>
+            </table>
+        </div>
+        {% endfor %}
+        {% endif %}
+        
+    </div>
+   
+      
+    <div id="menu1" class="tab-pane fade">
+    {% if puede_comentar == 1 %}
+      <form>
+      
+        <div class="form-group">
+    <label for="exampleFormControlTextarea1">Escribe tu opinión del producto aquí!</label>
+    <textarea class="form-control" id="comentario" rows="3"></textarea>       
+          
+  </div>
+</form>
+        <button type="button" class="btn btn-primary" id="comentar">Comentar</button>
+          <span id="mensaje" class="mensaje"></span>
+       
+        <br>
+        <br>
+        <br>
+         {% endif %}
+        <p class="mensaje-editar pull-right"></p>
+        <div class="container" id="contenedor-comentarios">
+
+           
+        
+            
+        </div>
+        
+      </div>
+    </div>
+</div> 
+
+
+
+
+{% endblock %}
+{% block script %}
+<script>
+    
+    $('#minusbutOrder').on('click',function(){
+        
+       var cantidad_actual= parseInt($('#cantidadCarrito').val());
+        if(cantidad_actual>1){
+        cantidad_actual=cantidad_actual-1;
+            
+            
+        $('#cantidadCarrito').val(cantidad_actual);
+        }
+        
+    });
+     $('#addbutOrder').on('click',function(){
+        var cantidad_actual= parseInt($('#cantidadCarrito').val());
+        cantidad_actual=cantidad_actual+1;
+         console.log( $(this).attr('data-value'));
+           $.ajax({
+            url: '{% url "index:verificar_producto" %}',
+            data: {
+                
+                id_producto: $(this).attr('data-value'),
+                cantidad_comprar: cantidad_actual
+            } ,
+             dataType:'json',
+             success: function(data){
+                 
+             console.log( data.bandera);
+                 aj(data.bandera);
+                 
+             }
+            
+         });
+         
+         function aj(bandera){
+         if (bandera==1){
+           $('#cantidadCarrito').val(cantidad_actual);
+         }
+    else{
+        console.log("nel pastel");
+    }
+     
+         
+       
+         }
+    });
+     $('#mensaje').hide();
+     $('#comentar').click(function(){
+            
+    
+
+      
+            $.ajax({
+      url: '{% url "index:hacer_comentario" %}',
+       data:{
+           id_producto:"{{producto.id_producto}}",
+           comentario: $('#comentario').val(),
+       },
+       dataType: 'json',
+       success: function(data){
+        
+        if(data.exito==1){   
+           $('#comentario').val('');
+            
+            $('#mensaje').text(data.mensaje).addClass('mensaje-exito');
+              $('#mensaje').show('slow');
+            $('#mensaje').delay(5000).fadeOut('slow');
+             $('#contenedor-comentarios').children().remove();
+           Comentarios();
+         
+        }
+           else{
+               
+            $('#mensaje').text(data.mensaje).addClass('mensaje-error');
+              $('#mensaje').show('slow');
+            $('#mensaje').delay(5000).fadeOut('slow');
+           }
+           
+           
+          
+         
+
+        
+       }
+   });
+         
+      
+     });
+    
+
+    
+    
+    
+    
+    
+     $colores="";
+    var coloress="";
+    var aaa="";
+    
+    {% if producto.categoria.id_categoria == 2 %}
+    {% for color in tarjetavideo.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-tarjetavideo').text($colores);
+     
+     {% elif producto.categoria.id_categoria == 3  %}
+     {% for color in tarjetamadre.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-tarjetamadre').text($colores);
+     
+     
+     {% elif producto.categoria.id_categoria == 6  %}
+     {% for color in ram.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-ram').text($colores);
+     
+     
+     {% elif producto.categoria.id_categoria == 8  %}
+     {% for color in gabinete.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-gabinete').text($colores);
+     
+     $mobo="";
+     
+     {% for mobo in gabinete.mobos_soportadas.all %}
+     
+     $mobo=$mobo+"{{mobo.factor_forma}}"+", "; 
+     {% endfor %}
+     $mobo=$mobo.slice(0,-2);
+      $('#tarjetasmadres-soportadas').text($mobo);
+      
+      
+       $dd="";
+     
+     {% for dd in gabinete.dd_soportados.all %}
+     
+     $dd=$dd+"{{dd.tamdd}}"+", "; 
+     {% endfor %}
+     $dd=$dd.slice(0,-2);
+      $('#dd-soportados').text($dd);
+     
+     
+     {% elif producto.categoria.id_categoria == 9  %}
+     {% for color in teclado.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-teclado').text($colores);
+     
+     {% elif producto.categoria.id_categoria == 10  %}
+     {% for color in mouse.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-mouse').text($colores);
+     
+     
+     {% elif producto.categoria.id_categoria == 11  %}
+     {% for color in monitor.colores.all %}
+        $colores=$colores+"{{color.color}}"+", ";
+    {% endfor %}
+     $colores=$colores.slice(0,-2);
+     $('#color-monitor').text($colores);
+     
+    {% endif %}
+    
+  
+    
+    
+    
+    
+    
+    $('#titulo-comentarios').hide();
+     
+   function Comentarios(){ 
+   $.ajax({
+      url: '{% url "index:obtener_comentarios" %}',
+       data:{
+           id_producto:"{{producto.id_producto}}"
+       },
+       dataType: 'json',
+       success: function(data){
+          
+          crearSeccionComentarios(data.comentarios);
+       }
+   });
+   }
+     Comentarios();
+   
+    var MEDIA_URL="{{MEDIA_URL}}";
+     
+   function crearSeccionComentarios(comentarios){
+      
+        $('#titulo-comentarios').show();
+        $.each(comentarios, function(index, comentario){
+           
+           var comentario2=JSON.parse(comentario); 
+            
+            var id_usuario="{{user.id}}"
+var html_comentario='<div class="col-sm-1"><div class="thumbnail"><img class="img responsive user-photo" src="'+MEDIA_URL+comentario2.avatar+'"></div></div>'; 
+            var html_comentario2='<div class="col-sm-12"><div class="panel panel-default"><div class="panel-heading"><strong>'+comentario2.nombre_usuario+'</strong><span class="text-muted"> '+ comentario2.fecha_comentario+'</span>';
+            var html_comentario3=""
+            if (comentario2.id_usuario==id_usuario){
+                html_comentario3='<span class="pull-right"><a class="editar ' +comentario2.id_comentario+'">Editar</a></span>'
+            }
+    
+    var html_comentario4='</div><div class="panel-body" id="'+comentario2.id_comentario+'">'+comentario2.comentario+'</div></div><div class="'+ 'comentario-'+comentario2.id_comentario+' pull-right"></div><br></div>';
+            
+            $('<div/>',{
+                
+                class: 'row comentarios',
+                html: html_comentario+html_comentario2+html_comentario3+html_comentario4
+                
+            }).appendTo('#contenedor-comentarios');
+            
+            
+            
+        });
+       
+       var bandera=0;
+        
+         $('.editar').click(function(){
+         bandera=bandera+1;
+        var valor= $(this).attr('class');
+        var valor2=valor.split(" ").pop();
+        var contenido_area=$("#"+valor2).html();
+        var area=$('<div/>',{
+            class: 'panel-body',
+            id: valor2,
+            html: contenido_area
+        });
+             console.log(area);
+          if(bandera==1){   
+       $(this).text('Cerrar');
+         var area_editar=$('<textarea/>',{
+             class: 'form-control',
+             rows: '3',
+             id: valor2,
+             html: contenido_area
+         });
+            
+         $("#"+valor2).replaceWith(area_editar);
+            $('<span/>',{
+              html:'<button type="button" class="btn btn-primary" id="guardar-'+valor2+'">Guardar</button>'
+            }).appendTo('.comentario-'+valor2);  
+         }
+             else{
+                 $(this).text('Editar');
+                  $("#"+valor2).replaceWith(area);
+                 $('#guardar-'+valor2).remove();
+                 bandera=0;
+             }
+             
+              var new_input ="";
+              $('#'+valor2).blur(function() {
+                 new_input = $(this).val();
+                        console.log(new_input);
+                    });
+             
+             $('#guardar-'+valor2).click(function(){
+                 
+                
+                 
+              $.ajax({
+                  url: '{% url "index:editar_comentario" %}',
+                  data:{
+                      id_comentario: valor2,
+                      comentario: new_input
+                  },
+                  dataType:'json',
+                  success: function(data){
+                       $('.mensaje-editar').addClass('mensaje-editar-exito');
+                     $('.mensaje-editar').text(data.mensaje_actualizar);
+                      $('.mensaje-editar').delay(5000).fadeOut('slow');
+                    $('#contenedor-comentarios').children().remove();
+                      Comentarios();
+                  }
+                  
+              });
+                  
+             });
+             
+     });
+
+             
+    }
+      
+   
+     
+   
+    
+     
+$(document).ready(function(){
+    
+       
+    
+    
+ $('#slider').ubislider({
+    arrowsToggle: true,
+    type: 'ecommerce',
+    hideArrows: true,
+    autoSlideOnLastClick: true,
+    modalOnClick: true,
+    position: 'vertical', 
+    onTopImageChange: function(){
+    	$('.zoom').elevateZoom();
+    }
+ });
+      
+  
+    
+    });
+
+  
+            
+       
+    $(".comprar").click(function(){
+        
+   
+       
+        $desc_pro=$('.producto').children().html();
+    
+         $.notify({
+        icon: 'glyphicon glyphicon-shopping-cart',
+        title:"<strong>Has añadido: </strong>",    
+	   
+	   message: $desc_pro + "<strong> a tu carrito</strong>",
+   
+         },{
+	 
+             type: 'success',
+            offset: {y:50, x:0},
+                               	animate: {
+		enter: 'animated fadeInRight',
+		exit: 'animated fadeOutRight'
+	},
+         });
+        
+         var lista_productos=[];
+      
+        
+        var productos_carrito=sessionStorage.getItem("carrito-productos");
+        if(productos_carrito!=null){
+            lista_productos.push(productos_carrito);
+            
+
+           }
+        else {
+            var lista_productos3=[];
+           
+         sessionStorage.setItem("carrito-productos", lista_productos3);
+        }
+        var cantidad_carrito= $('#cantidadCarrito').val();
+
+    for(var i=1; i<=cantidad_carrito;i++){    
+     lista_productos.push($(this).val());
+    }
+        $('#cantidadCarrito').val(1);
+     sessionStorage.setItem("carrito-productos",lista_productos);
+        $.ajax({
+            url: '{% url "index:obtener_total_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+              console.log(data.total);
+                console.log(data.cantidad)
+                $('#total-carrito').text(" $"+data.total+" ");;
+                $('#cantidad-carrito').text(data.cantidad+" ");
+               
+               
+                
+            }
+            
+        });
+ });
+      $('.favorito').click(function(){
+       
+
+       
+       $desc_pro=$('.producto').children().html();
+          console.log($desc_pro);
+        
+         $.notify({
+        icon: 'glyphicon glyphicon-heart',
+        title:"<strong>Has añadido: </strong>",    
+	   
+	   message: $desc_pro + "<strong> a tus favoritos</strong>",
+   
+         },{
+	 
+             type: 'danger',
+            offset: {y:50, x:0},
+                               	animate: {
+		enter: 'animated fadeInRight',
+		exit: 'animated fadeOutRight'
+	},
+         });
+        var lista_favoritos=[];
+      
+        
+        var productos_favorito=sessionStorage.getItem("productos-favoritos");
+          console.log(productos_favorito);
+        if(productos_favorito!=null){
+            lista_favoritos.push(productos_favorito);
+            console.log(lista_favoritos);
+
+           }
+        else {
+            var lista_productos3=[];
+           
+           sessionStorage.setItem("productos-favoritos", lista_productos3);
+        }
+        
+     lista_favoritos.push($(this).val());
+        sessionStorage.setItem("productos-favoritos",lista_favoritos);
+
+     $.ajax({
+            url: '{% url "index:obtener_cantidad_favorito" %}',
+            
+            data:{ lista_productos_favorito:JSON.stringify(sessionStorage.getItem("productos-favoritos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+                
+                $('#cantidad-favorito').text(data.cantidad+" ");
+               
+                
+                
+            }
+            
+        });
+         
+        
+    });
+   
+</script>
+{% endblock %}
+
+{% block ubislider %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- ubislider Javascript file -->
+<script src="{% static 'css/ubislider/jqueryElevateZoom.js' %}"></script>
+<script src="{% static 'css/ubislider/ubislider.min.js' %}"></script>
+<!-- ubislider CSS file -->
+<link href="{% static 'css/ubislider/ubislider.min.css' %}" rel="stylesheet" />
+ <script src="{% static 'js/jquery/bootstrap-notify.min.js' %}"></script>
+<script src="{% static 'js/cookies/jquery.cookie.js' %}"></script>
+{% endblock %}

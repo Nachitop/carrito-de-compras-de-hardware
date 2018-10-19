@@ -1,0 +1,495 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang=es-mx>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %} Dimercom -Computo Inteligente- {% endblock %}</title>
+      
+    <!-- Referencia al archivo index por css -->  
+     {% block estilo %}{% endblock %}
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/yamm/yamm.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate/animate.css' %}" rel="stylesheet">
+    
+    <!-- Custom styles for this template -->
+    
+    
+</head>
+    <style>
+        #titulo-categorias{
+            padding-left: 15px;
+            color: teal;
+        }
+        p.cat{
+            color: teal;
+        }
+        
+        body { padding-top: 50px; 
+ margin: 0;
+        }
+        .collapse {
+       background-color: black;
+   }
+
+
+.navbar-nav  {
+    
+    height: 50px;
+ 
+  flex-flow: row wrap;
+  
+}
+#buscador{
+    padding-top: 13px;
+    padding-left: 50px;
+    width: 500px;
+    
+}
+
+ .navbar-brand {
+    margin-left: 0px;
+     padding-top: 0;
+  }
+.navbar{
+     text-align: center;
+    font: 50px;
+    flex-flow: row wrap;
+}
+.carrito{
+    padding-top: 10px;
+}
+
+
+
+.t{
+    
+    height:10%;
+    width=:10%;
+    margin: 5px;
+}
+        #contenedor-cosas{
+            padding-left: 500px;
+        }
+        .cora{
+            color:white  !important;
+             font-size: 1.4em !important;
+        }
+
+nav {
+     width: 100%;
+     height: 40px;
+    
+     border-radius: 6px !important;
+     -moz-border-radius: 6px !important;
+        }
+.hola{
+    color: white !important;
+    font-size: 1.4em !important;
+    }
+.nav li{
+    padding-right:5px;
+   }
+
+
+
+
+ul.dropdown-lr {
+  width: 300px;
+}
+
+/* mobile fix */
+@media (max-width: 768px) {
+	.dropdown-lr h3 {
+		color: #eee;
+	}
+	.dropdown-lr label {
+		color: #eee;
+	}
+}
+
+.navbar .navbar-nav > li.open > a:hover,
+.navbar .navbar-nav > li.open > a:focus {
+  background-color: teal;
+  color: #fff;
+}
+.navbar-nav > li > .dropdown-menu { 
+
+}
+
+.navbar {
+      margin-bottom: 0px;
+      border-radius: 0px;
+    }
+
+.carousel-inner img {
+      width: 100%; /* Set width to 100% */
+      margin: auto;
+      min-height:200px;
+  }
+
+
+        span.glyphicon-heart.cor:hover{
+            color: red;
+        }
+         span.glyphicon-shopping-cart.car:hover{
+            color: limegreen;
+        }
+        
+        i.glyphicon-user.hum:hover{
+            color: darkturquoise;
+        }
+
+
+.resaltar{
+ outline:  2px solid teal;
+}
+        
+  .searchResults {
+  
+  background-color: white; 
+  border: 1px solid black; 
+  z-index: 40;
+      height: 100px;
+  
+}
+#resultados {
+    overflow-x:hidden;
+    overflow-y:visible;
+    height:500px;
+}
+    </style>
+  {% block jquery1 %}
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{% static "js/jquery/jquery.min.js" %}"><\/script>')</script>
+    <!-- <script src="{% static 'js/jquery/jquery.min.js' %}"></script> -->
+    {% endblock %}  
+    
+    {% block jquery2 %}
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{% static "js/jquery/jquery-3.3.1.js" %}"><\/script>')</script>-->
+    <script src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
+   <script src="{% static 'js/jquery/tinysort.js' %}"></script>
+     <script src="{% static 'js/jquery/tinysort.charorder.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery/jquery.bootpag.js' %}"></script>
+    <script src="{% static 'js/jquery/bootstrap-notify.min.js' %}"></script>
+    <script src="{% static 'js/cookies/jquery.cookie.js' %}"></script>
+    
+    <script>
+        var MEDIA_URL="{{MEDIA_URL}}";
+        if (sessionStorage.getItem("carrito-productos")!=null){
+           
+     $.ajax({
+            url: '{% url "index:obtener_total_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+                $('#total-carrito').text(" $"+data.total+" ");;
+                $('#cantidad-carrito').text(data.cantidad+" ");
+               
+                
+                
+            }
+            
+        });
+        }
+    </script>
+    <script>
+         if (sessionStorage.getItem("productos-favoritos")!=null){
+                $('#cantidad-favorito').text( sessionStorage.getItem("productos-favoritos").length);
+         }
+        
+      function crearResultados(lista_resultados){
+          var x=0;
+          var clase_esconder="";
+          if (lista_resultados.length==0){
+                  $('<div/>',{
+                class:'form-control searchResults resultado',
+                  html: 'No se han encontrado resultados',
+                 
+                }).appendTo('#resultados');
+          }
+          else{
+              
+          var bandera=0;
+          $.each(lista_resultados,function(index,producto){
+              x=x+1;
+              resultado=JSON.parse(producto);
+              if(x>=6){
+                  clase_esconder="hi ";
+                  bandera=1;
+              }
+               var url2='{% url "index:obtener_producto" 1 %}'.replace('1',resultado.id_producto.toString());
+              $('<div/>',{
+                class:clase_esconder+'form-control searchResults resultado '+resultado.id_producto,
+                  value: resultado.id_producto,
+                  html: '<a href="'+url2+'"><div class="pull-left"><img  src="'+MEDIA_URL+resultado.imagen+'" height="20%" width="20%">'+resultado.descripcion+'</div></a>'
+                }).appendTo('#resultados');
+          });
+          if(bandera==1){
+          $('<a/>',{
+              class: 'btn btn-primary btn-md btn-block mostrar',
+              html: "Cargar más productos"
+          }).appendTo('#resultados');
+          }
+              
+              $('.hi').hide();
+               $('.mostrar').on('click', function() {
+           
+            $('.hi').show();
+                   $('.mostrar').remove();
+          });
+          
+          }
+      }  
+
+jQuery(function($) {
+    $('#buscador1').on('keyup', function() {
+    $('.resultado').remove();
+        $('.mostrar').remove();
+        
+        $.ajax({
+           url: '{% url "index:obtenerDescripcionProducto" %}',
+            data:{
+                q:$(this).val()
+            },
+            dataType:'json',
+            success: function(data){
+            console.log(data.busqueda_productos);
+                
+                crearResultados(data.busqueda_productos);
+                
+                
+                  
+                }
+        
+        });
+    });
+});
+        
+    </script>
+    {% endblock %}
+<body>
+    
+  
+    
+    
+  <!--internet  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> --> 
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    {% block bootstap %}
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock %}
+
+	{% block header %}
+	
+    
+        <!-- Fixed navbar -->
+        <nav class="navbar yamm navbar-default navbar-inverse navbar-fixed-top" role="navigation" id="topnavbar">
+
+
+
+          
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'index:index' %}"><img src="{% static 'img/logos/dimercom-logo.png' %}"></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse ">
+                    <!--Wayfinder.outerTpl -->
+                    <ul class="nav navbar-nav">
+                        <!-- Wayfinder.parentRowTpl -->
+                        <li class="first dropdown yamm-fw">
+                            <a href="#" title="" class="dropdown-toggle hola" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Productos<b class="caret"></b></a>
+                            
+                            <!--Wayfinder.innerTpl -->
+                            <ul class="dropdown-menu ">
+                                <div ><a href="{% url 'index:categorias' %}"><h3 id="titulo-categorias">Categorias</h3></a></div>
+                                  <li role="separator" class="divider"></li>
+                                <!-- Yamm start tags -->
+                                <li>
+                                    
+                                    <div class="yamm-content">
+                                        <div class="row">
+                                            <dl class="col-sm-3 mega-menu">
+                                                <!-- Wayfinder.categoryFoldersTpl -->
+                                                <dt class="first"><p class="cat">Componentes</p></dt>
+                                                <!--Wayfinder.innerTpl -->
+                                                {% for c in categorias %}
+                                                {% if  c.id_categoria != 9 and c.id_categoria != 10 and c.id_categoria != 5 and c.id_categoria != 4 and  c.id_categoria != 11 %}
+                                                    <dd><a href="{% url 'index:ir_categoria' categoria=c.id_categoria %}">{{c.categoria}}</a></dd>
+                                                <li role="separator" class="divider"></li>
+                                                {% endif %}
+                                                    {% endfor %}
+                                            </dl>
+                                            <dl class="col-sm-3 mega-menu">
+                                                <dt class=""><p class="cat">Almacenamiento</p></dt>
+
+                                                 {% for c in categorias %}
+                                                {% if c.id_categoria == 5 or c.id_categoria == 4 %}
+                                                    <dd><a href="{% url 'index:ir_categoria' categoria=c.id_categoria %}">{{c.categoria}}</a></dd>
+                                                <li role="separator" class="divider"></li>
+                                                {% endif %}
+                                                    {% endfor %}
+
+
+                                            </dl>
+                                            <dl class="col-sm-3 mega-menu">
+
+                                                <dt class=""><p class="cat">Accesorios</p></dt>
+                                                 {% for c in categorias %}
+                                                {% if c.id_categoria == 9 or c.id_categoria == 10 %}
+                                                    <dd><a href="{% url 'index:ir_categoria' categoria=c.id_categoria %}">{{c.categoria}}</a></dd>
+                                                <li role="separator" class="divider"></li>
+                                                {% endif %}
+                                                    {% endfor %}
+                                            </dl>
+                                            <dl class="col-sm-3 mega-menu">
+                                                <dt class="">
+                                    <p class="cat">Video</p></dt>
+                                        {% for c in categorias %}
+                                                {% if c.id_categoria == 11 %}
+                                        <dd><a href="{% url 'index:ir_categoria' categoria=c.id_categoria %}">{{c.categoria}}</a></dd>
+                                                <li role="separator" class="divider"></li>
+                                                {% endif %}
+                                        {% endfor %}
+                                        
+                                                
+                                                
+                                            </dl>
+
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                                <!--yamm end tags-->
+                            </ul>
+                        </li>
+                             <li><a href="{% url 'index:ofertas_listado' %}" class="hola">Ofertas</a></li>
+                         <li><a href="{% url 'index:recien_llegado' %}" class="hola">Nuevos</a></li> 
+                                                                      <li>  <form id="buscador">
+    <div class="input-group input-group-sm">
+      <input type="text" id="buscador1" class="form-control" placeholder="Buscar producto">
+        
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </div>
+                                                                          <div id="resultados">
+                                                                          
+                                                                          </div>
+                                                                    
+                                                                          </form></li>
+                        <ul class="nav navbar-nav" id="contenedor-cosas" >
+                        <ul class="nav navbar-nav">
+                          <li id="li-carrito"><a href="{% url 'index:favoritos' %}" class="cora"><span class="glyphicon glyphicon-heart cor"><span id="cantidad-favorito"></span></span></a> </li>  
+                       <li id="li-carrito"><a href="{% url 'index:carrito' %}" class="hola li-carrito"><span id="total-carrito"></span><span class="glyphicon glyphicon-shopping-cart car"><span id="cantidad-carrito"></span></span></a></li>
+                        </ul>
+                        
+         
+    
+                                                    <ul class="nav navbar-nav">
+                                                         
+        <li class="dropdown usuario">
+                    <a href="#" class="dropdown-toggle hola" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >  <i class="glyphicon glyphicon-user hum"></i> Usuario<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'cliente:perfil' %}">Perfil</a></li>
+                        <li><a href="{% url 'index:historial_compras' %}">Historial de compras</a></li>
+                        <li><a href="{% url 'logout' %}">Salir</a></li>
+                    {% else %}
+                    <li><a href="{% url 'cliente:registrarse' %}">Registrarse</a></li>
+                    <li><a href="{% url 'login' %}">Ingresar</a></li>
+                    {% endif %}
+          </ul>
+        </li> 
+       
+      </ul>
+               
+ 
+    </ul>
+                       
+                    </ul>
+   
+
+
+                </div>
+                <!--/.nav-collapse -->
+            
+        </nav>
+    
+
+	{% endblock %}
+
+	{% block content %}
+    
+    
+	{% endblock %}
+    <br>
+    <br>
+	{% block footer %}
+     
+	{% endblock %}
+
+
+   
+  
+    
+   
+ 
+     
+
+</body>
+       <script>
+
+            
+    </script>
+    {% block script %}
+    
+         
+    
+    {% endblock %}
+    
+    {% block yamm %}
+    <script>    
+        $(document).on('click', '.yamm .dropdown-menu', function(e) {
+            e.stopPropagation()
+        });
+        
+        $('.yamm-content').find('a').mouseenter(function(){
+            $(this).css('outline','2px solid #ddd');
+            console.log("hola");
+        });
+         $('.yamm-content').find('a').mouseleave(function(){
+            $(this).css('outline','');
+            console.log("hola");
+        });
+        
+        
+        
+    </script>
+    
+    
+
+    {% endblock %}
+    
+    {% block ubislider %}
+{% endblock %}
+    
+</html>
+

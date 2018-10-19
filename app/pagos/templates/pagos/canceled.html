@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block estilo %}<link href="{% static 'css/password_reset_done.css' %}" rel="stylesheet">{% endblock %}
+{% block title %}
+Pago cn paypal error
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="container">
+      <form class="form-signin">
+       <a href="{% url 'index:index' %}">   <img  src="{% static 'img/logos/dimercom-logo2.png' %}" ></a>
+              
+        <h1>Su pago no ha sido procesado con exito. Hubo un error durante la transacción :( </h1>
+          <br>
+          <br>
+          <a type="button" href="{% url 'index:index' %}" value="Seguir Comprando" class="btn btn-primary btn-lg btn-block">Continuar en la página principal</a>
+          </form>
+   </div> 
+
+
+{% endblock %}
+{% block script %}
+<script>
+           
+sessionStorage.clear();
+</script>
+{% endblock %}

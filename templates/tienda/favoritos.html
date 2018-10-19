@@ -1,0 +1,166 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Ver carrito
+{% endblock %}
+{% block estilo %} <link href="{% static 'css/carrito.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<h1 id="inicio-carrito">
+    Favoritos
+</h1>
+																				
+	<br>		        	    					
+<div class="container-fluid">
+
+    <table class="table">
+    <thead>
+        <tr>
+             <th><center>Acción</center></th>
+            <th>Imagen</th>
+            <th>Descripción</th>
+            <th><center>Precio Unitario</center></th>
+           
+           
+        </tr>
+    </thead>
+    <tbody>
+    
+    </tbody>
+</table>
+   
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    var listado_favoritos=[];
+if(sessionStorage.getItem("productos-favoritos")!=null){
+    
+    listado_favoritos.push(sessionStorage.getItem("productos-favoritos"));
+      console.log(listado_favoritos);
+    RecuperarFavoritos(listado_favoritos);
+    
+}else{
+     var lista_productos3=[];
+           
+           sessionStorage.setItem("productos-favoritos", lista_productos3);
+    
+    RecuperarFavoritos(listado_favoritos);
+   
+}
+  
+function RecuperarFavoritos(listado_favoritos){
+    
+    $.ajax({
+       url: '{% url "index:obtener_listado_favoritos" %}',
+        data: {
+            listado_favoritos_locales: JSON.stringify(listado_favoritos)  
+        },
+        dataType:'json',
+        success: function(data){
+            if(data.listado_favoritos.length<=0){
+                $('table').remove();
+                $('#inicio-carrito').text("Su lista de favoritos está vacía");
+            }
+            
+            crearProductos(data.listado_favoritos);
+            
+        }
+    });
+    
+}
+    
+    
+        
+    var MEDIA_URL="{{MEDIA_URL}}";
+function crearProductos(ListaJsonProductos){
+   
+
+    
+    
+    $.each(ListaJsonProductos,function(index, producto){
+   var producto2 = JSON.parse(producto);
+        
+            var url2='{% url "index:obtener_producto" 1 %}'.replace('1',producto2.id_producto.toString());
+    
+     var producto_html='<td><center><button type="button" title="Eliminar de mis favoritos" class="btn btn-outline-danger btn-danger eliminar" value='+producto2.id_producto+'><span class="glyphicon glyphicon-trash"></span></button></center></td><td><a href="'+url2+'"><img class="img-responsive" src="'+MEDIA_URL+producto2.imagen+'" height="30%" width="30%"></a></td><td><a href="'+url2+'"><p class="precio">'+producto2.categoria+' '+producto2.marca+' ';
+          if(producto2.precio_oferta>0){
+         cadena_precios=producto2.precio_oferta;
+        
+    }
+        else{
+            cadena_precios=producto2.precio;
+        }
+       
+            
+    
+        
+       if(producto2.id_categoria==1){
+          
+            producto_html=producto_html+ producto2.familia_procesador+' '+producto2.modelo+', '+producto2.socket_procesador+', '+producto2.nucleos+'-core'+', '+producto2.cantidad_cache+'MB '+producto2.cache_procesador;
+       }
+        else if(producto2.id_categoria==2){
+            producto_html=producto_html+producto2.familia_grafica+' '+producto2.procesador_grafico+' '+producto2.modelo_grafica+', '+producto2.memoria_grafica_gb+'GB '+producto2.tipo_memoria_grafica+', '+producto2.ancho_datos_bits+'-bits, '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==3){
+            
+            producto_html=producto_html+producto2.factor_forma+' '+producto2.chipset+' '+producto2.modelo+', S-'+producto2.socket_procesador+', '+producto2.cantidad_memoria_gb+'GB '+producto2.tipo_memoria+' para '+producto2.para_marca;
+        }
+        else if(producto2.id_categoria==4){
+            producto_html=producto_html+producto2.modelo +', '+producto2.capacidad+'GB, '+producto2.tamdd+'", '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==5){
+            producto_html=producto_html+producto2.modelo+', '+producto2.capacidad+'GB, '+producto2.cache +'MB cache, '+producto2.tamdd+'", '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==6){
+            producto_html=producto_html+producto2.modelo+' '+producto2.cantidad_memoria_gb+'GB '+producto2.tipo_memoria+' , '+producto2.cantidad_memoria_mhz+' Mhz';
+        }
+        else if(producto2.id_categoria==7){
+            producto_html=producto_html+producto2.modelo+' '+producto2.potencia_nominal+'W '+producto2.certificacion+', '+producto2.factor_forma;
+        }
+        else if(producto2.id_categoria==8){
+            producto_html=producto_html+producto2.modelo+' '+producto2.factor_forma_gabinete+' '+producto2.ventana+' '+producto2.psu_incluida;
+        }
+        else if(producto2.id_categoria==9){
+            producto_html=producto_html+producto2.modelo+', '+producto2.conectividad+', '+producto2.tipo_interfaz+', '+producto2.idioma;
+        }
+        else if(producto2.id_categoria==10){
+            producto_html=producto_html+producto2.modelo+', '+producto2.conectividad+', '+producto2.tipo_interfaz+', '+producto2.dpi+' Dpi';
+        }
+        else if(producto2.id_categoria==11){
+            producto_html=producto_html+producto2.modelo+' '+producto2.tam_pantalla+'", '+producto2.resolucion+', '+producto2.hd+', '+producto2.relacion_aspecto;
+        }
+      
+         $('<tr/>',{
+        
+                    html: producto_html+'<td><center><p class="precio">$'+cadena_precios+'</p></center></td>'
+                }).appendTo('tbody');
+    
+        
+    });
+    
+     $('.eliminar').on('click',function(){
+         var lista_productos3=[];
+           
+           sessionStorage.setItem("productos-favoritos", lista_productos3);
+       $(this).parent().parent().parent().remove();
+         $('tr').remove();
+         $.ajax({
+            url: '{% url "index:eliminar_de_favoritos" %}',
+             data:{
+                 producto_favorito_eliminar: $(this).val()
+             },
+             dataType:'json',
+             success: function(data){
+                
+                 crearProductos(data.listado_favoritos);
+                 if(data.cantidad<=0){
+                     $('#inicio-carrito').text("Su lista de favoritos está vacía");
+                 }
+             }
+         });
+    });
+    
+}
+   
+</script>
+{% endblock %}

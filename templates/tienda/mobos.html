@@ -1,0 +1,632 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Tarjetas madres
+{% endblock %}
+{% block estilo %} <link href="{% static 'css/mobos.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<div class="container-fluid">
+<div id="titulo-filtro">
+      <h2>Opciones de filtrado</h2>
+    </div>
+    <div class="container-fluid">
+        <div class="col-sm-10 nopadding" id="filtros"> 
+            
+              <div class="contenedor-marca col-sm-1 ">
+                <div class="titulos">Marcas</div>
+              
+                  <div class="marcas" id="marcas">
+                       {% for marca in marcas %}
+                        <div class="form-check" value="{{marca.id_marca}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-marca" value="{{marca.id_marca}}"><label class="form-check-label" value="{{marca.id_marca}}"> {{marca.marca}}</label>
+       
+                        </div>
+                      {% endfor %}
+                  </div>
+          
+            
+            </div>
+            
+              <div class="contenedor-familia col-sm-1 ">
+                <div class="titulos">Familia</div>
+                  <div class="familias" id="familias">
+                      
+                        {% for familia in familias %}
+                        <div class="form-check" value="{{familia.id_familia_procesador}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-familia" value="{{familia.id_familia_procesador}}"><label class="form-check-label" value="{{familia.id_familia_procesador}}"> {{familia.familia_procesador}}</label>
+       
+                        </div>
+                        {% endfor %}
+          
+                  </div>
+          
+            
+            </div>
+            
+             <div class="contenedor-socket col-sm-1 ">
+                <div class="titulos">Socket</div>
+                  <div class="socket" id="socket">
+                    {% for socket in sockets %}
+                        <div class="form-check" value="{{socket.id_socket_procesdor}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-socket" value="{{socket.id_socket_procesdor}}"><label class="form-check-label" value="{{socket.id_socket_procesdor}}"> {{socket.socket_procesador}}</label>
+       
+                        </div>
+                        {% endfor %}
+          
+                  </div>
+          
+            
+            </div>
+              <div class="contenedor-chipset col-sm-1 ">
+                <div class="titulos">Chipset</div>
+                  <div class="chipset" id="chipset">
+                    {% for chipset in chipsets %}
+                        <div class="form-check" value="{{chipset.id_chipset}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-chipset" value="{{chipset.id_chipset}}"><label class="form-check-label" value="{{chipset.id_chipset}}"> {{chipset.chipset}}</label>
+       
+                        </div>
+                        {% endfor %}
+          
+                  </div>
+          
+            
+            </div>
+            
+            
+             <div class="contenedor-memoria col-sm-1 ">
+                <div class="titulos">Catidad de memoria máxima soportada</div>
+                  <div class="memoria" id="memoria">
+                      {% for memoria in memorias %}
+                        <div class="form-check" value="{{memoria}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-memoria" value="{{memoria}}"><label class="form-check-label" value="{{memoria}}"> {{memoria}} GB</label>
+       
+                        </div>
+                        {% endfor %}
+          
+          
+                  </div>
+          
+            
+            </div>
+            
+            
+                 <div class="contenedor-tipo col-sm-1  ">
+                <div class="titulos">Tipo Memoria</div>
+                  <div class="tipo" id="tipo">
+                      {% for tipo in tipos %}
+                        <div class="form-check" value="{{tipo.id_tipo_memoria}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-tipo" value="{{tipo.id_tipo_memoria}}"><label class="form-check-label" value="{{ttipo.id_tipo_memoria}}"> {{tipo.tipo_memoria}}</label>
+       
+                        </div>
+                        {% endfor %}
+          
+          
+                  </div>
+          
+            
+            </div>
+            
+            
+            <div class="contenedor-forma col-sm-1 ">
+                <div class="titulos">Factor de forma</div>
+                  <div class="forma" id="forma">
+                    {% for forma in formas %}
+                        <div class="form-check" value="{{forma.id_factor_forma}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-forma" value="{{forma.id_factor_forma}}"><label class="form-check-label" value="{{forma.id_factor_forma}}"> {{forma.factor_forma}}</label>
+       
+                        </div>
+                        {% endfor %}
+          
+                  </div>
+          
+            
+            </div>
+        
+         <div class="contenedor-para col-sm-1 ">
+                <div class="titulos">Para</div>
+                  <div class="para" id="para">
+                    {% for para in paras %}
+                        <div class="form-check" value="{{para.id_marca}}">
+                            <input type="checkbox" class="filled-in form-check-input checkbox-para" value="{{para.id_marca}}"><label class="form-check-label" value="{{para.id_marca}}"> {{para.marca}}</label>
+       
+                        </div>
+                        {% endfor %}
+          
+                  </div>
+          
+            
+            
+            
+                </div>
+              
+            </div>
+           
+            
+            </div>
+       
+    
+    
+</div>
+    <br>
+    <br>
+    
+         <div class="panel panel-default">
+         <div class="panel-heading clearfix">
+     <b>Tarjetas madre</b>
+            <div class="dropup pull-right ordenar">
+                <label>Ordenar por:</label>
+             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="predeterminado">Predeterminado
+                 <span class="caret"></span></button>
+             <ul class="dropdown-menu">
+                 <li class="dropdown-header">NOMBRE</li>
+                 <li class="ord a-z"><a href="#">A-Z</a></li>
+                 <li class="ord z-a"><a href="#">Z-A</a></li>
+                 <li class="divider"></li>
+                 <li class="dropdown-header">PRECIO</li>
+                <li class="ord bajo-alto"><a href="#">Bajo-Alto</a></li>
+                <li class="ord alto-bajo"><a href="#">Alto-Bajo</a></li>
+                </ul>
+                
+             </div>
+           
+                </div>
+         
+         
+         
+         <div class="panel-body">
+         
+             <div class="container-fluid productos" id="productos">
+                 
+                 
+             </div>
+         </div>
+         <div class="panel-footer clearfix">
+             <div id="paginas" class="pull-right"></div>
+            
+             
+             </div>
+    </div>     
+    
+    
+    
+    
+
+
+
+{% endblock %}
+{% block script %}
+<script>
+var $marcas= $('.checkbox-marca');
+   var $familias= $('.checkbox-familia');
+   var $sockets= $('.checkbox-socket');
+     var $chipsets= $('.checkbox-chipset');
+   var $memorias= $('.checkbox-memoria');
+    var $tipos= $('.checkbox-tipo');
+     var $formas= $('.checkbox-forma');
+     var $paras= $('.checkbox-para');
+    
+    $("body").on("change", "input[type=checkbox]",function(){
+        var l_marcas=[];
+        var l_familias=[];
+        var l_sockets=[];
+         var l_chipsets=[];
+        var l_memorias=[];
+         var l_tipos=[];
+        var l_formas=[];
+        var l_paras=[];
+        $('.producto').remove();
+        
+        $.each($marcas,function(index, marca){
+            if(marca.checked==true){
+         l_marcas.push(marca.getAttribute("value"));
+               
+            }
+        });
+        
+        $.each($familias,function(index, familia){
+            if(familia.checked==true){
+         l_familias.push(familia.getAttribute("value"));
+               
+            }
+        });
+        
+        $.each($sockets,function(index, socket){
+            if(socket.checked==true){
+         l_sockets.push(socket.getAttribute("value"));
+               
+            }
+        });
+            $.each($chipsets,function(index, chipset){
+            if(chipset.checked==true){
+         l_chipsets.push(chipset.getAttribute("value"));
+               
+            }
+        });
+        
+        $.each($memorias,function(index, memoria){
+            if(memoria.checked==true){
+         l_memorias.push(memoria.getAttribute("value"));
+               
+            }
+        });
+         $.each($tipos,function(index, tipo){
+            if(tipo.checked==true){
+         l_tipos.push(tipo.getAttribute("value"));
+               
+            }
+        });
+          $.each($formas,function(index, forma){
+            if(forma.checked==true){
+         l_formas.push(socket.getAttribute("value"));
+               
+            }
+        });
+          $.each($paras,function(index, para){
+            if(para.checked==true){
+         l_paras.push(para.getAttribute("value"));
+               
+            }
+        });
+        
+         $.ajax({
+            url: '{% url "index:obtener_determinados_productos" %}',
+            
+            data:{ categoria:3,
+                  marcas: JSON.stringify(l_marcas),
+                  familias: JSON.stringify(l_familias),
+                  sockets:JSON.stringify(l_sockets),
+                  chipsets:JSON.stringify(l_chipsets),
+                  memorias: JSON.stringify(l_memorias),
+                  tipos: JSON.stringify(l_tipos),
+                  formas:JSON.stringify(l_formas),
+                paras:JSON.stringify(l_paras),
+           
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+              
+           crearProductos(data.productos);
+            crearPaginacion(data.cantidad);
+               
+                
+                
+            }
+        });
+       
+    
+        
+    });
+   
+     var $ordenamientos=$('.ordenar').find('.ord');
+    var $ordenamiento_predeterminado=$ordenamientos.filter('.bajo-alto');
+    
+    
+    
+    
+    
+function cargarProductosInicio(){
+     $.ajax({
+            url: '{% url "index:obtener_productos_por_categoria" %}',
+            
+            data:{ id_categoria:3,
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+              
+           crearProductos(data.productos);
+            crearPaginacion(data.cantidad);
+               
+                
+                
+            }
+        });
+    }
+cargarProductosInicio();
+    
+    
+    
+    
+    var MEDIA_URL="{{MEDIA_URL}}";
+function crearProductos(ListaJsonProductos){
+
+    
+    $.each(ListaJsonProductos,function(index, producto){
+    producto2 = JSON.parse(producto);
+        
+            var url2='{% url "index:obtener_producto" 1 %}'.replace('1',producto2.id_producto.toString());
+    
+     var producto_html='<div class="thumbnail"><a href="'+url2+'"><img  src="'+MEDIA_URL+producto2.imagen+'" height="50%" width="50%"></a><div class="caption"><center><a href="'+url2+'"><p>'+producto2.categoria+' '+producto2.marca+' ';
+          if(producto2.precio_oferta>0){
+         cadena_precios='<Center><strike><h4><span class="label label-default">$'+producto2.precio+'</strike></h4></span><h2><span class="label label-warning">$'+producto2.precio_oferta+'</h2></span></Center>';
+        
+    }
+        else{
+            cadena_precios='<Center><h2><span class="label label-warning">'+'$'+producto2.precio+'</h2></span></Center>';
+        }
+    var producto_botones_html ='</p></a></center>'+cadena_precios+'<br><center><p><p><button class="btn btn-primary btn-lg comprar" role="button" data-toggle="tooltip" title="Anadir al carrito" value='+producto2.id_producto+'><span class="glyphicon glyphicon-shopping-cart"></span></button> <button values='+producto2.id_producto+' class="btn btn-danger btn-lg favorito" role="button" data-toggle="tooltip" title="Anadir a favoritos" value='+producto2.id_producto+'><span class="glyphicon glyphicon-heart"></span></button></p></center></div></div>';
+        
+       if(producto2.id_categoria==1){
+          
+            producto_html=producto_html+ producto2.familia_procesador+' '+producto2.modelo+', '+producto2.socket_procesador+', '+producto2.nucleos+'-core'+', '+producto2.cantidad_cache+'MB '+producto2.cache_procesador;
+       }
+        else if(producto2.id_categoria==2){
+            producto_html=producto_html+producto2.familia_grafica+' '+producto2.procesador_grafico+' '+producto2.modelo_grafica+', '+producto2.memoria_grafica_gb+'GB '+producto2.tipo_memoria_grafica+', '+producto2.ancho_datos_bits+'-bits, '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==3){
+            
+            producto_html=producto_html+producto2.factor_forma+' '+producto2.chipset+' '+producto2.modelo+', S-'+producto2.socket_procesador+', '+producto2.cantidad_memoria_gb+'GB '+producto2.tipo_memoria+' para '+producto2.para_marca;
+        }
+        else if(producto2.id_categoria==4){
+            producto_html=producto_html+producto2.modelo +', '+producto2.capacidad+'GB, '+producto2.tamdd+'", '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==5){
+            producto_html=producto_html+producto2.modelo+', '+producto2.capacidad+'GB, '+producto2.cache +'MB cache, '+producto2.tamdd+'", '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==6){
+            producto_html=producto_html+producto2.modelo+' '+producto2.cantidad_memoria_gb+'GB '+producto2.tipo_memoria+' , '+producto2.cantidad_memoria_mhz+' Mhz';
+        }
+        else if(producto2.id_categoria==7){
+            producto_html=producto_html+producto2.modelo+' '+producto2.potencia_nominal+'W '+producto2.certificacion+', '+producto2.factor_forma;
+        }
+        else if(producto2.id_categoria==8){
+            producto_html=producto_html+producto2.modelo+' '+producto2.factor_forma_gabinete+' '+producto2.ventana+' '+producto2.psu_incluida;
+        }
+        else if(producto2.id_categoria==9){
+            producto_html=producto_html+producto2.modelo+', '+producto2.conectividad+', '+producto2.tipo_interfaz+', '+producto2.idioma;
+        }
+        else if(producto2.id_categoria==10){
+            producto_html=producto_html+producto2.modelo+', '+producto2.conectividad+', '+producto2.tipo_interfaz+', '+producto2.dpi+' Dpi';
+        }
+        else if(producto2.id_categoria==11){
+            producto_html=producto_html+producto2.modelo+' '+producto2.tam_pantalla+'", '+producto2.resolucion+', '+producto2.hd+', '+producto2.relacion_aspecto;
+        }
+        $('<div/>',{
+                    class: 'col-sm-7 col-md-3 producto',
+                    value: producto2.precio,
+                    html: producto_html+producto_botones_html
+                }).appendTo('#productos');
+        
+    });
+    
+    
+  $('.comprar').click(function(){
+       
+
+       
+     
+         $desc_pro=$(this).closest('.producto').children().children('div').children().first().children().children().html();
+        console.log($desc_pro);
+         $.notify({
+        icon: 'glyphicon glyphicon-shopping-cart',
+        title:"<strong>Has añadido: </strong>",    
+	   
+	   message: $desc_pro + "<strong> a tu carrito</strong>",
+   
+         },{
+	 
+             type: 'success',
+            offset: {y:50, x:0},
+                               	animate: {
+		enter: 'animated fadeInRight',
+		exit: 'animated fadeOutRight'
+	},
+         });
+        var lista_productos=[];
+      
+        
+        var productos_carrito=sessionStorage.getItem("carrito-productos");
+        if(productos_carrito!=null){
+            lista_productos.push(productos_carrito);
+            
+
+           }
+        else {
+            var lista_productos3=[];
+           
+           sessionStorage.setItem("carrito-productos", lista_productos3);
+        }
+        
+     lista_productos.push($(this).val());
+        sessionStorage.setItem("carrito-productos",lista_productos);
+      
+      
+        $.ajax({
+            url: '{% url "index:obtener_total_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+                $('#total-carrito').text(" $"+data.total+" ");
+                $('#cantidad-carrito').text(data.cantidad+" ");
+               
+                
+                
+            }
+            
+        });
+        
+    });
+    $('.favorito').click(function(){
+       
+
+       
+        $desc_pro=$(this).closest('.producto').children().children('div').children().first().children().children().html();
+        console.log($desc_pro);
+         $.notify({
+        icon: 'glyphicon glyphicon-heart',
+        title:"<strong>Has añadido: </strong>",    
+	   
+	   message: $desc_pro + "<strong> a tus favoritos</strong>",
+   
+         },{
+	 
+             type: 'danger',
+            offset: {y:50, x:0},
+                               	animate: {
+		enter: 'animated fadeInRight',
+		exit: 'animated fadeOutRight'
+	},
+         });
+        var lista_favoritos=[];
+      
+        
+        var productos_favorito=sessionStorage.getItem("productos-favoritos");
+        if(productos_favorito!=null){
+            lista_favoritos.push(productos_favorito);
+            
+
+           }
+        else {
+            var lista_productos3=[];
+           
+           sessionStorage.setItem("productos-favoritos", lista_productos3);
+        }
+        
+     lista_favoritos.push($(this).val());
+        sessionStorage.setItem("productos-favoritos",lista_favoritos);
+        
+         $.ajax({
+            url: '{% url "index:obtener_cantidad_favorito" %}',
+            
+            data:{ lista_productos_favorito:JSON.stringify(sessionStorage.getItem("productos-favoritos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+                
+                $('#cantidad-favorito').text(data.cantidad+" ");
+               
+                
+                
+            }
+            
+        });
+        
+
+        
+        
+        
+    });
+    
+     $('.btn-primary').css("visibility", "hidden");
+    $('.btn-danger').css("visibility", "hidden");
+      $('.thumbnail').mouseenter(function(){
+        $(this).addClass('resaltar');
+        $(this).find('.btn-primary').css("visibility", "");
+        $(this).find('.btn-danger').css("visibility", "");
+    });
+     $('.thumbnail').mouseleave(function(){
+         $(this).removeClass('resaltar');
+        $(this).find('.btn-primary').css("visibility", "hidden");
+        $(this).find('.btn-danger').css("visibility", "hidden");
+    });
+    
+    $productos=$('#productos').children();  
+    $productos.hide();
+    
+    var paginas=Math.ceil($productos.length/16);
+   
+    var x=0;
+    var i=1;
+    while(i<=paginas){
+        x=0;
+    $.each($productos,function(index,producto){
+        
+            
+            if($productos.filter(producto).hasClass('p')){
+            
+            }
+            else{
+                x=x+1;
+                if(x<=16){
+                 $productos.filter(producto).addClass('p');
+             $productos.filter(producto).addClass('pagina-'+i.toString());
+                }
+                
+                
+            }
+            
+    
+                
+                              });
+        i=i+1;
+    
+    
+}
+        $productos.filter('.pagina-1').show();
+    
+    $ordenamiento_predeterminado.click();
+     crearPaginacion($productos.length);
+    
+}
+    
+    
+   $ordenamientos.on('click',function(){
+       
+        $productos=$('.productos').children();
+    
+      var $tipo_ordenamiento=$(this).attr('class').split(' ').pop();
+     var $texto=$(this).text();
+       $('#predeterminado').text($texto);
+       
+       if($tipo_ordenamiento=="a-z"){
+          tinysort($productos,{order:'asc'});
+          }
+       else if($tipo_ordenamiento=="z-a"){
+           tinysort($productos,{order:'des'});
+       }
+       else if($tipo_ordenamiento=="alto-bajo"){
+               tinysort($productos,{attr:'value',order:'des'});
+               }
+       else if($tipo_ordenamiento=="bajo-alto"){
+           tinysort($productos,{attr:'value',order:'asc'});
+       }
+      
+       $ordenamiento_predeterminado=$ordenamientos.filter('.'+$tipo_ordenamiento);
+   });
+    
+    
+    function crearPaginacion(cantidad){
+       
+         $num_pag=cantidad/16;
+         $num_pag=Math.ceil($num_pag);
+        if($num_pag==0){
+            $('.pagination').remove();
+        }
+        else{
+         
+            $('#paginas').bootpag({
+                    total:$num_pag ,
+                    page: 1,
+                    
+                    
+                    leaps: true,
+                    next: 'siguiente',
+                    prev: 'anterior'
+            });
+        }
+    }
+    
+   $('#paginas').on('page', function(event, num){
+            
+       $productos.not('.pagina-'+num).hide();
+            $productos.filter('.pagina-'+num).show();
+            
+                });
+</script>
+{% endblock %}

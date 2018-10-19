@@ -1,0 +1,52 @@
+
+
+
+#titulo-filtro{
+    
+    height: 20px;
+    line-height: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: darkgrey;
+    text-shadow: 1px 1px 0 #fff;
+
+    min-width: 210px;
+    
+}
+
+
+#filtros{
+    
+    padding-top: 30px;
+}
+
+
+
+.titulos{
+    color:darkturquoise;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+
+.contenedor-marca{
+    float:flex;
+    display:inline-block;
+     width: 250px;
+   
+}
+
+
+.contenedor-forma{
+    float:flex;
+    display:inline-block;
+     width: 250px;
+   
+}
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+
+#titulo-filtro{
+    
+    height: 20px;
+    line-height: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: darkgrey;
+    text-shadow: 1px 1px 0 #fff;
+
+    min-width: 210px;
+    
+}
+
+
+
+#filtros{
+    
+    padding-top: 30px;
+}
+
+.of{
+    
+    
+    
+     color: darkslategrey;
+    height: 50px;
+    
+}
+
+
+
+.contenedor-categoria{
+    float:left;
+}
+
+.contenedor-marca{
+    float:right;
+}
+
+
+.titulo-categoria{
+    color:black;
+    font-size: 14px;
+    font-weight: 700;
+}
+.titulo-marca{
+    color:wheat;
+    font-size: 14px;
+    font-weight: 700;
+}

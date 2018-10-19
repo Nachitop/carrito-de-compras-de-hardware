@@ -1,0 +1,465 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Ver carrito
+{% endblock %}
+{% block estilo %} <link href="{% static 'css/carrito.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<h1 id="inicio-carrito">
+    Carrito
+</h1>
+																				
+	<br>		        	    					
+<div class="container-fluid">
+
+    <table class="table">
+    <thead>
+        <tr>
+             <th><center>Acción</center></th>
+            <th>Imagen</th>
+            <th>Descripción</th>
+            <th><center>Cantidad</center></th>
+            <th><center>Precio Unitario</center></th>
+            <th>Total</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+    
+    </tbody>
+</table>
+    <br>
+    <br>
+    <div class="container-fluid" id="desglose"></div>
+    <div class="container-fluid" id="desglose2"></div>
+    <div class="container-fluid" id="desglose3"></div>
+    <br>
+    <br>
+    <div class="container-fluid" id="pagos"></div>
+   
+</div>
+{% endblock %}
+{% block script %}
+<script>
+   
+function cargarProductosCarrito(){
+     $.ajax({
+            url: '{% url "index:ver_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+              
+           crearProductos(data.productos, data.cantidades,data.total);
+           calcularTotal(data.total);     
+    
+               
+                
+             
+                  $.ajax({
+            url: '{% url "pagos:recibir_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+            console.log(data.mensaje);    
+                
+            }
+        });
+                
+                
+            }
+        });
+    }
+    
+    function calcularTotal(total){
+        $('#desglose').children().remove();
+         $('#desglose2').children().remove();
+         $('#desglose3').children().remove();
+                   var costo_envio=150;
+        var total_parseado=parseInt(total);
+                   $('<p/>',{
+            class: 'pull-right precio',
+            html: '<b>Subtotal:</b><span style="color:#337ab7"> $'+total+'</span>'
+        }).appendTo('#desglose');
+        $('<p/>',{
+            class: 'pull-right precio',
+            html: '<b>Envío:</b><span style="color:#337ab7"> $'+ costo_envio+'</span>'
+        }).appendTo('#desglose2');
+          $('<p/>',{
+            class: 'pull-right precio',
+            html: '<b>Total a pagar:</b><span style="color:#337ab7"> $'+(total_parseado+costo_envio)+'</span>'
+        }).appendTo('#desglose3');
+    }
+    
+    if(sessionStorage.getItem("carrito-productos")!=null){      
+           cargarProductosCarrito();
+        
+        
+        
+         $('<div/>',{
+            html:'<button type="button" class="btn btn-danger btn-lg" id="vaciar"><span class="glyphicon glyphicon-trash"></span> Vaciar carrito</button><a type="button" class="btn btn-warning btn-lg" href="{% url "index:index" %}"><span class="glyphicon glyphicon-circle-arrow-left"></span> Seguir comprando</a><a type="button" class="btn btn-success btn-lg" href="{% url "pagos:process" %}"><span class="glyphicon glyphicon-credit-card"></span> Pagar</a>',
+             class:'btn-toolbar pull-right'
+            
+        }).appendTo('#pagos');
+        
+        
+        
+        
+        }
+                else{
+                   $('#inicio-carrito').html("SU CARRITO ESTÁ VACÍO");
+                }
+
+    
+    
+    
+    
+    var MEDIA_URL="{{MEDIA_URL}}";
+function crearProductos(ListaJsonProductos, ListaJsonCantidades, total){
+   
+
+    
+    
+    $.each(ListaJsonProductos,function(index, producto){
+   var producto2 = JSON.parse(producto);
+        
+            var url2='{% url "index:obtener_producto" 1 %}'.replace('1',producto2.id_producto.toString());
+    
+     var producto_html='<td><center><button type="button" class="btn btn-outline-danger btn-danger eliminar" value='+producto2.id_producto+'><span class="glyphicon glyphicon-trash"></span></button></center></td><td><a href="'+url2+'"><img class="img-responsive" src="'+MEDIA_URL+producto2.imagen+'" height="30%" width="30%"></a></td><td id="'+producto2.id_producto+'"><a href="'+url2+'"><p class="precio">'+producto2.categoria+' '+producto2.marca+' ';
+          if(producto2.precio_oferta>0){
+         cadena_precios=producto2.precio_oferta;
+        
+    }
+        else{
+            cadena_precios=producto2.precio;
+        }
+        var cantidad="";
+        $.each(ListaJsonCantidades, function(idndex,cantidad_producto){
+            var cantidad_producto2=JSON.parse(cantidad_producto);
+            if(producto2.id_producto==cantidad_producto2.id_producto){
+             cantidad=cantidad_producto2.cantidad;
+            }
+            
+        });
+        
+       if(producto2.id_categoria==1){
+          
+            producto_html=producto_html+ producto2.familia_procesador+' '+producto2.modelo+', '+producto2.socket_procesador+', '+producto2.nucleos+'-core'+', '+producto2.cantidad_cache+'MB '+producto2.cache_procesador;
+       }
+        else if(producto2.id_categoria==2){
+            producto_html=producto_html+producto2.familia_grafica+' '+producto2.procesador_grafico+' '+producto2.modelo_grafica+', '+producto2.memoria_grafica_gb+'GB '+producto2.tipo_memoria_grafica+', '+producto2.ancho_datos_bits+'-bits, '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==3){
+            
+            producto_html=producto_html+producto2.factor_forma+' '+producto2.chipset+' '+producto2.modelo+', S-'+producto2.socket_procesador+', '+producto2.cantidad_memoria_gb+'GB '+producto2.tipo_memoria+' para '+producto2.para_marca;
+        }
+        else if(producto2.id_categoria==4){
+            producto_html=producto_html+producto2.modelo +', '+producto2.capacidad+'GB, '+producto2.tamdd+'", '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==5){
+            producto_html=producto_html+producto2.modelo+', '+producto2.capacidad+'GB, '+producto2.cache +'MB cache, '+producto2.tamdd+'", '+producto2.tipo_interfaz;
+        }
+        else if(producto2.id_categoria==6){
+            producto_html=producto_html+producto2.modelo+' '+producto2.cantidad_memoria_gb+'GB '+producto2.tipo_memoria+' , '+producto2.cantidad_memoria_mhz+' Mhz';
+        }
+        else if(producto2.id_categoria==7){
+            producto_html=producto_html+producto2.modelo+' '+producto2.potencia_nominal+'W '+producto2.certificacion+', '+producto2.factor_forma;
+        }
+        else if(producto2.id_categoria==8){
+            producto_html=producto_html+producto2.modelo+' '+producto2.factor_forma_gabinete+' '+producto2.ventana+' '+producto2.psu_incluida;
+        }
+        else if(producto2.id_categoria==9){
+            producto_html=producto_html+producto2.modelo+', '+producto2.conectividad+', '+producto2.tipo_interfaz+', '+producto2.idioma;
+        }
+        else if(producto2.id_categoria==10){
+            producto_html=producto_html+producto2.modelo+', '+producto2.conectividad+', '+producto2.tipo_interfaz+', '+producto2.dpi+' Dpi';
+        }
+        else if(producto2.id_categoria==11){
+            producto_html=producto_html+producto2.modelo+' '+producto2.tam_pantalla+'", '+producto2.resolucion+', '+producto2.hd+', '+producto2.relacion_aspecto;
+        }
+        $('<tr/>',{
+        
+                    html: producto_html+'</td><td class='+producto2.id_producto+'><div class="carritoDetalle carritoAddItems text-center" style="" data-value='+producto2.id_producto+'><button class="buttonSumOrder pull-left restar" id="minusbutOrder" type="button">-</button><input type="text" class="textoInput pull-left" id="cantidadCarrito" style="width: 30px; text-align: center;" value="'+cantidad+'" readonly/><button class="buttonSumOrder pull-left sumar" id="addbutOrder" type="button">+</button></div></td><td><center><p class="precio">$'+cadena_precios+'</p></center></td><td><p class="precio">$'+parseInt(cantidad)*parseInt(cadena_precios)+'</p></td></td>'
+                }).appendTo('tbody');
+     
+        
+    
+        
+    });
+    
+
+    
+     $('.restar').on('click',function(){
+         
+        $padre= $(this).parent().children('input[type="text"]');
+         
+       var cantidad_actual= parseInt($padre.val());
+        if(cantidad_actual>1){
+        cantidad_actual=cantidad_actual-1;
+        $($padre).val(cantidad_actual);
+        }
+            sessionStorage.removeItem("carrito-productos");
+         $detalles=$('.carritoDetalle');
+        
+        
+         var lista_productos=[];
+         $.each($detalles,function(index,detalle ){
+            
+            var cantidad= $(detalle).children('input[type="text"]').val();
+             
+             for(var i=1;i<=cantidad;i++){
+                 
+                   lista_productos.push($(detalle).data('value'));
+       
+             }
+             
+         });
+         
+          $('td').remove();
+            
+              sessionStorage.setItem("carrito-productos",lista_productos);
+            
+   
+            
+              $.ajax({
+            url: '{% url "index:ver_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+             
+           crearProductos(data.productos, data.cantidades, data.total);
+                calcularTotal(data.total); 
+        
+                
+               
+                
+                
+            }
+        });
+         
+         actualizariconocarrito();
+        
+    });
+  
+     $('.sumar').on('click',function(){
+          $padre= $(this).parent().children('input[type="text"]');
+        var cantidad_actual= parseInt($padre.val());
+        cantidad_actual=cantidad_actual+1;
+         
+        
+         $.ajax({
+            url: '{% url "index:verificar_producto" %}',
+            data: {
+               
+                id_producto: $(this).parent().attr('data-value'),
+                cantidad_comprar: cantidad_actual
+            } ,
+             dataType:'json',
+             success: function(data){
+                 
+             console.log( data.bandera);
+                 aj(data.bandera);
+                 
+             }
+            
+         });
+         
+        
+function aj(bandera){
+         if (bandera==1){
+          $padre.val(cantidad_actual);
+         }
+    else{
+        console.log("nel pastel");
+    }
+     
+         
+            sessionStorage.removeItem("carrito-productos");
+         $detalles=$('.carritoDetalle');
+       
+       
+         var lista_productos=[];
+         $.each($detalles,function(index,detalle ){
+            
+            var cantidad= $(detalle).children('input[type="text"]').val();
+             
+             for(var i=1;i<=cantidad;i++){
+                 
+                   lista_productos.push($(detalle).data('value'));
+       
+             }
+             
+         });
+         
+          $('td').remove();
+            
+            
+            
+     
+            
+            
+              sessionStorage.setItem("carrito-productos",lista_productos);
+            
+   
+            
+              $.ajax({
+            url: '{% url "index:ver_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+              
+        
+           crearProductos(data.productos,data.cantidades,data.total);
+                calcularTotal(data.total); 
+        
+                
+               
+                
+                
+            }
+        });
+    
+          actualizariconocarrito();
+}
+    });
+    
+    
+    $('.eliminar').on('click',function(){
+     
+    
+        $(this).parent().parent().parent().remove();
+        //$(this).parent().remove();
+        
+   
+        
+             sessionStorage.removeItem("carrito-productos");
+         $detalles=$('.carritoDetalle');
+         
+     
+            if($detalles.length==0){
+                $('td').remove();
+                $('.btn-toolbar').remove();
+                 $('#inicio-carrito').html("SU CARRITO ESTÁ VACÍO");
+                 $('#total-carrito').text("");
+                $('#cantidad-carrito').text("");
+                $('#desglose').remove();
+                $('#desglose2').remove();
+                $('#desglose3').remove();
+                
+            }
+        else{
+         var lista_productos=[];
+         $.each($detalles,function(index,detalle ){
+              
+            var cantidad= $(detalle).children('input[type="text"]').val();
+             
+             for(var i=1;i<=cantidad;i++){
+                 
+                   lista_productos.push($(detalle).data('value'));
+       
+             }
+             
+         });
+         
+          $('td').remove();
+            
+            
+            
+     
+      
+              sessionStorage.setItem("carrito-productos",lista_productos);
+            
+    
+            
+              $.ajax({
+            url: '{% url "index:ver_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+              
+        
+               
+           crearProductos(data.productos,data.cantidades,data.total);
+        
+                
+               calcularTotal(data.total); 
+                
+                
+            }
+        });
+        }
+         actualizariconocarrito();
+    });
+    
+    
+    
+ 
+
+    
+    
+    
+}
+function actualizariconocarrito(){
+         if (sessionStorage.getItem("carrito-productos")!=null){
+           
+     $.ajax({
+            url: '{% url "index:obtener_total_carrito" %}',
+            
+            data:{ lista_productos_carrito:JSON.stringify(sessionStorage.getItem("carrito-productos")),
+                
+                  
+                
+            },
+            dataType:'json',
+            success: function(data){
+               
+                $('#total-carrito').text(" $"+data.total+" ");;
+                $('#cantidad-carrito').text(data.cantidad+" ");
+               
+                
+                
+            }
+            
+        });
+        }
+}
+    $('#vaciar').click(function(){
+          sessionStorage.removeItem("carrito-productos");
+    
+                $('td').remove();
+                $('.btn-toolbar').remove();
+                 $('#inicio-carrito').html("SU CARRITO ESTÁ VACÍO");
+                 $('#total-carrito').text("");
+                $('#cantidad-carrito').text(""); 
+          $('#desglose').remove();
+                $('#desglose2').remove();
+                $('#desglose3').remove();
+    });
+</script>
+{% endblock %}

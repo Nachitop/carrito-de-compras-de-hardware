@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block title %}
+Categorias
+{% endblock %}
+{% block estilo %} <link href="{% static 'css/categorias.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<div class="container-fluid"></div>
+{% for categoria in categorias %}
+<div class="col-sm-7 col-md-3">
+<div class="thumbnail" >
+    <center><h2>{{categoria.categoria}}</h2></center>
+    <img src="{{categoria.imagen_categoria.url}}">
+    <br>
+   <a type="button" href="{% url 'index:ir_categoria' categoria=categoria.id_categoria %}" class="btn btn-warning botones-categorias">Ver Categoria</a>
+    <br>
+</div>
+</div>
+{% endfor %}
+
+
+{% endblock %}
+{% block script %}
+<script>
+    $('.botones-categorias').hide();
+    $('.thumbnail').mouseenter(function(){
+        $(this).find(':not(.botones-categorias)').addClass('resaltar2');
+        $(this).find('.botones-categorias').show('slow');
+    });
+      $('.thumbnail').mouseleave(function(){
+         $(this).find(':not(.botones-categorias)').removeClass('resaltar2');
+          
+        $(this).find('.botones-categorias').hide('slow');
+    });
+</script>
+{% endblock %}

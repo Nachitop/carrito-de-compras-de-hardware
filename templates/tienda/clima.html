@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section id="clima">
+</section>
+{% endblock %}
+{% block script %}
+<script>
+$.ajax({
+            url: '{% url "index:obtener_clima" %}',
+            
+            data:{
+                inicio: "1",
+                
+            },
+            dataType:'json',
+            success: function(data){
+                 
+           console.log(data);
+                
+                pintar_clima(data);
+               
+               
+             
+                
+            }
+        });
+    
+    
+    
+    function pintar_clima(data){
+        
+        var clima_html='<p> Ciudad: '+data.clima.location.name+'</p><br><p> Actualizado por ultima vez: '+data.clima.current_conditions.last_updated+'</p><br><p> Temperatura: '+data.clima.current_conditions.temperature+' '+data.clima.units.temperature+'</p>'
+        $('<div/>',{
+            html: clima_html,
+        }).appendTo('#clima');
+    }
+    </script>
+
+{% endblock %}
